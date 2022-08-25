@@ -101,6 +101,7 @@ public class {{executionTestClassName}} {
     SummaryGeneratingListener listener;
     TestExecutionSummary summary;
     Launcher launcher;
+    boolean warmupExecution = false;
 
     String classUnderTestName = testToExecute.split("#")[0];
     Class classUnderTestObject = Class.forName(classUnderTestName);
@@ -133,14 +134,16 @@ public class {{executionTestClassName}} {
       listener = new SummaryGeneratingListener();
       launcher.execute(testPlan, listener);
       summary = listener.getSummary();
-      generateXmlOutput(summary, "testFailures-" + i + ".xml");
+      if (i < 10) warmupExecution = true;
+      else warmupExecution = false;
+      generateXmlOutput(summary, "testFailures-" + i + ".xml", warmupExecution);
     }
 
     execution.cancel(true);
     executor.shutdown();
   }
 
-  private static void generateXmlOutput(TestExecutionSummary summary, String fileName)
+  private static void generateXmlOutput(TestExecutionSummary summary, String fileName, boolean isWarmupExecution)
       throws ParserConfigurationException {
 
     final DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -150,6 +153,8 @@ public class {{executionTestClassName}} {
     final Element rootElement = doc.createElement("testfailures");
     rootElement.setAttribute("duration",
         String.valueOf(summary.getTimeFinished() - summary.getTimeStarted()));
+    rootElement.setAttribute("isWarmupExecution",
+        String.valueOf(isWarmupExecution));
     doc.appendChild(rootElement);
 
     final Pattern pattern = Pattern.compile("\\[class:(.*?)\\]");
