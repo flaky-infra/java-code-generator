@@ -112,14 +112,11 @@ public class {{executionTestClassName}} {
         .collect(Collectors.toList());
 
     for (int i = 0; i < numberOfRun; i++) {
-      if (false) {
+      launcher = LauncherFactory.create();
+      if (isTestOrder) {
         staticFieldValuePairs.forEach(
             fieldValuePair -> mirror.on(classUnderTestObject).set().field(fieldValuePair.getField())
                 .withValue(deepClone(fieldValuePair.getStartValue())));
-      }
-
-      launcher = LauncherFactory.create();
-      if (isTestOrder) {
         request = LauncherDiscoveryRequestBuilder.request()
             .selectors(selectClass(testToExecute.split("#")[0]))
             .configurationParameter("junit.jupiter.testmethod.order.default",
