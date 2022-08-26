@@ -1,11 +1,8 @@
 export const executionTestClassName = 'FlakyInfraTest';
 
-// export const neededDependencies = [
-//   {name: 'org.junit.jupiter:junit-jupiter-api', version: ':5.8.1'},
-//   {name: 'org.junit.jupiter:junit-jupiter-engine', version: ':5.8.1'},
-//   {name: 'org.junit.vintage:junit-vintage-engine', version: ':5.8.1'},
-//   {name: 'org.junit.platform:junit-platform-launcher', version: ':1.8.1'},
-// ];
+export const xmlParseOptions = {
+  ignoreAttributes: false,
+};
 
 interface Dependency {
   type: 'testImplementation' | 'implementation';
